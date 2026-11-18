@@ -8,6 +8,7 @@ import {
   TwitchApiError,
   type FollowedChannel,
 } from "~/server/twitch";
+import FollowedChannelsTable from "./followed-channels-table";
 
 export const dynamic = "force-dynamic";
 
@@ -94,13 +95,22 @@ export default async function FollowsPage() {
           {channels.length} followed{" "}
           {channels.length === 1 ? "channel" : "channels"}
         </p>
-        <a
-          href="/api/follows/csv"
-          download="twitch-followed-channels.csv"
-          className="rounded-md bg-[#9146ff] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
-        >
-          Download CSV
-        </a>
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="/api/follows/csv"
+            download="twitch-followed-channels.csv"
+            className="rounded-md bg-[#9146ff] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
+          >
+            Download CSV
+          </a>
+          <a
+            href="/api/follows/json"
+            download="twitch-followed-channels.json"
+            className="rounded-md border border-white/15 px-4 py-2.5 text-sm font-semibold text-white/75 transition-colors hover:border-white/35 hover:text-white"
+          >
+            Download JSON
+          </a>
+        </div>
       </div>
 
       {channels.length === 0 ? (
@@ -109,62 +119,7 @@ export default async function FollowsPage() {
         </p>
       ) : (
         <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-160 border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-y border-white/10 text-xs tracking-wide text-white/45 uppercase">
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Channel
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Login
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Twitch ID
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Followed
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Info
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {channels.map((channel) => (
-                <tr key={channel.broadcaster_id}>
-                  <td className="px-4 py-4 font-medium text-white">
-                    <a
-                      href={`https://www.twitch.tv/${channel.broadcaster_login}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-[#b991ff]"
-                    >
-                      {channel.broadcaster_name}
-                    </a>
-                  </td>
-                  <td className="px-4 py-4 text-white/65">
-                    {channel.broadcaster_login}
-                  </td>
-                  <td className="px-4 py-4 font-mono text-xs text-white/50">
-                    {channel.broadcaster_id}
-                  </td>
-                  <td className="px-4 py-4 text-white/65">
-                    <time dateTime={channel.followed_at}>
-                      {new Date(channel.followed_at).toLocaleDateString()}
-                    </time>
-                  </td>
-                  <td className="px-4 py-4">
-                    <Link
-                      href={`/channel/${encodeURIComponent(channel.broadcaster_id)}`}
-                      className="text-[#b991ff] hover:text-white"
-                    >
-                      Info
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <FollowedChannelsTable channels={channels} />
         </div>
       )}
     </FollowsPageLayout>
