@@ -9,7 +9,7 @@ type FollowedChannel = {
   followed_at: string;
 };
 
-type SortKey = "name" | "login" | "id" | "followedAt" | "channel";
+type SortKey = "name" | "login" | "id" | "followedAt";
 type SortDirection = "ascending" | "descending";
 
 const columns: { key: SortKey; label: string }[] = [
@@ -17,7 +17,6 @@ const columns: { key: SortKey; label: string }[] = [
   { key: "login", label: "Login" },
   { key: "id", label: "Twitch ID" },
   { key: "followedAt", label: "Followed" },
-  { key: "channel", label: "Channel" },
 ];
 
 export default function FollowedChannelsTable({
@@ -61,9 +60,9 @@ export default function FollowedChannelsTable({
   }
 
   return (
-    <table className="min-w-160 w-full border-collapse text-left text-sm">
+    <table className="w-full min-w-160 border-collapse text-left text-sm">
       <thead>
-        <tr className="border-y border-white/10 text-xs uppercase tracking-wide text-white/45">
+        <tr className="border-y border-white/10 text-xs tracking-wide text-white/45 uppercase">
           {columns.map(({ key, label }) => (
             <th
               key={key}
@@ -87,6 +86,9 @@ export default function FollowedChannelsTable({
               </button>
             </th>
           ))}
+          <th scope="col" className="px-4 py-3 font-medium">
+            Channel
+          </th>
         </tr>
       </thead>
       <tbody className="divide-y divide-white/10">
@@ -114,7 +116,7 @@ export default function FollowedChannelsTable({
                 aria-label={`Visit ${channel.broadcaster_name} on Twitch`}
                 className="text-[#b991ff] hover:text-white"
               >
-                Visit
+                Visit on Twitch.tv
               </a>
             </td>
           </tr>
@@ -129,7 +131,6 @@ function getSortValue(channel: FollowedChannel, key: SortKey) {
     case "name":
       return channel.broadcaster_name;
     case "login":
-    case "channel":
       return channel.broadcaster_login;
     case "id":
       return channel.broadcaster_id;
