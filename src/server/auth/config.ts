@@ -1,10 +1,8 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-
-import { env } from "~/env";
-
 import TwitchProvider from "next-auth/providers/twitch";
 
+import { env } from "~/env";
 import { db } from "~/server/db";
 
 /**
@@ -17,15 +15,16 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      twitchUsername: string | null;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    twitchId?: string | null;
+    twitchUsername?: string | null;
+  }
 }
 
 /**
@@ -34,6 +33,7 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  trustHost: true,
   providers: [
     TwitchProvider({
       clientId: env.AUTH_TWITCH_ID,
@@ -60,7 +60,41 @@ export const authConfig = {
       user: {
         ...session.user,
         id: user.id,
+        twitchUsername: user.twitchUsername ?? null,
       },
     }),
+  },
+  events: {
+    signIn: async ({ user, account, profile }) => {
+      if (account?.provider !== "twitch") return;
+      if (typeof profile?.preferred_username !== "string") {
+        throw new Error("Twitch profile did not include a username.");
+      }
+
+      await db.$transaction([
+        db.user.update({
+          where: { id: user.id },
+          data: {
+            twitchId: account.providerAccountId,
+            twitchUsername: profile.preferred_username,
+          },
+        }),
+        db.account.updateMany({
+          where: {
+            userId: user.id,
+            provider: "twitch",
+            providerAccountId: account.providerAccountId,
+          },
+          data: {
+            access_token: account.access_token,
+            refresh_token: account.refresh_token,
+            expires_at: account.expires_at,
+            scope: account.scope,
+            token_type: account.token_type,
+            id_token: account.id_token,
+          },
+        }),
+      ]);
+    },
   },
 } satisfies NextAuthConfig;

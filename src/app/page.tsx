@@ -1,69 +1,121 @@
 import Link from "next/link";
 
-import { LatestPost } from "~/app/_components/post";
-import { auth } from "~/server/auth";
-import { api, HydrateClient } from "~/trpc/server";
+import { auth, signIn } from "~/server/auth";
+
+async function signInWithTwitch() {
+  "use server";
+
+  await signIn("twitch");
+}
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
   const session = await auth();
-
-  if (session?.user) {
-    void api.post.getLatest.prefetch();
-  }
+  const userName = session?.user?.name ?? session?.user?.email ?? "No name";
 
   return (
-    <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello ? hello.greeting : "Loading tRPC query..."}
-            </p>
+    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#100f12] text-[#f5f2f7]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_0%,rgba(145,70,255,0.19),transparent_40%),radial-gradient(ellipse_at_88%_76%,rgba(83,252,24,0.08),transparent_32%)]" />
+      <section className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-6 py-20 sm:px-10">
+        <div className="max-w-3xl">
+          {!session?.user && (
+            <>
+              <p className="mb-6 flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-[#b991ff] uppercase">
+                <span className="h-px w-8 bg-[#9146ff]" /> Unofficial tools for
+                Twitch
+              </p>
+              <h1 className="max-w-2xl text-5xl leading-[1.05] font-semibold sm:text-7xl">
+                A couple tools for
+                <span className="block text-[#a970ff]">
+                  Twitch. Free to use.
+                </span>
+              </h1>
+              <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
+                Sign in with Twitch to see or download a list of the channels
+                you follow along with the follow date.
+              </p>
+              <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
+                Includes an additional tool for music ranking streams.
+              </p>
+            </>
+          )}
 
-            <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-center text-2xl text-white">
-                {session && <span>Logged in as {session.user?.name}</span>}
+          {session?.user ? (
+            <div className="mt-12 flex flex-col flex-wrap items-start gap-8">
+              <h1 className="max-w-2xl text-5xl leading-[1.05] font-semibold sm:text-7xl">
+                Welcome, <span className="text-[#a970ff]">{userName}</span>
+              </h1>
+              <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
+                Navigate to the tool you want to use.
               </p>
               <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+                href="/follows"
+                className="rounded-md bg-[#9146ff] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
               >
-                {session ? "Sign out" : "Sign in"}
+                My Followed Channels <span aria-hidden="true">↗</span>
+              </Link>
+              <Link
+                href="/boards"
+                className="rounded-md bg-[#9146ff] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
+              >
+                Music Boards <span aria-hidden="true">↗</span>
+              </Link>
+              <Link
+                href="/profile"
+                className="rounded-md border border-white/15 px-5 py-3 text-sm font-semibold text-white/75 transition-colors hover:border-white/35 hover:text-white"
+              >
+                My Twitch Token
+              </Link>
+              <span className="flex items-center gap-2 text-sm text-white/65">
+                <span className="size-2 rounded-full bg-[#53fc18]" />{" "}
+                Authenticated with Twitch as {userName}
+              </span>
+              <Link
+                href="/api/auth/signout"
+                className="text-sm text-white/55 underline decoration-white/25 underline-offset-4 hover:text-white"
+              >
+                Sign out
               </Link>
             </div>
-          </div>
-
-          {session?.user && <LatestPost />}
+          ) : (
+            <form action={signInWithTwitch} className="mt-12">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-3 rounded-md bg-[#9146ff] px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
+              >
+                <span className="grid size-5 place-items-center rounded bg-white/15 text-xs font-black">
+                  T
+                </span>
+                Connect with Twitch <span aria-hidden="true">↗</span>
+              </button>
+            </form>
+          )}
         </div>
-      </main>
-    </HydrateClient>
+
+        <div className="mt-24 grid max-w-3xl grid-cols-1 border-t border-white/10 pt-6 sm:grid-cols-3 sm:gap-8">
+          <div>
+            <p className="text-2xl font-semibold text-white/50">
+              1. <span className="text-[#a970ff]">Follow List</span>
+            </p>
+            <p className="mt-2 text-sm text-white/50">
+              View a list of channels you follow. Or download it as a CSV
+              spreadsheet.
+            </p>
+          </div>
+          <div className="mt-6 sm:mt-0">
+            <p className="text-2xl font-semibold text-white/50">
+              2. <span className="text-[#a970ff]">Music Ranking</span>
+            </p>
+            <p className="mt-2 text-sm text-white/50">
+              Music ranking tool where viewers can rate music and check top
+              songs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer className="relative border-t border-white/10 px-6 py-4 text-xs text-white/35 sm:px-10">
+        Made with love
+      </footer>
+    </main>
   );
 }
