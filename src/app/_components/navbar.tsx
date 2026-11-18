@@ -46,12 +46,6 @@ export async function Navbar() {
             <Link href="/follows" className="hover:text-white">
               My Follows
             </Link>
-            <Link href="/boards" className="hover:text-white">
-              Boards
-            </Link>
-            <Link href="/about" className="hover:text-white">
-              About
-            </Link>
             <form action={signOutAction}>
               <button
                 type="submit"
