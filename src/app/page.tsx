@@ -20,21 +20,23 @@ export default async function Home() {
           {!session?.user && (
             <>
               <p className="mb-6 flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-[#b991ff] uppercase">
-                <span className="h-px w-8 bg-[#9146ff]" /> Unofficial tools for
-                Twitch
+                <span className="h-px w-8 bg-[#9146ff]" />
+                https://my-twitch-follows.up.railway.app/
               </p>
-              <h1 className="max-w-2xl text-5xl leading-[1.05] font-semibold sm:text-7xl">
-                A couple tools for
-                <span className="block text-[#a970ff]">
-                  Twitch. Free to use.
-                </span>
+              <h1 className="max-w-2xl text-4xl leading-[1.05] font-semibold sm:text-7xl">
+                Get a list of all your{" "}
+                <span className="text-[#a970ff]"> followed channels</span> on
+                <span className="text-[#a970ff]"> Twitch</span>
               </h1>
               <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
-                Sign in with Twitch to see or download a list of the channels
-                you follow along with the follow date.
+                As a fellow Twitch enjoyer, I noticed it was not a simple task
+                to get a list of all the channels I followed. So I built this
+                simple tool. It is free to use, and not store or sell your
+                following data :D
               </p>
               <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
-                Includes an additional tool for music ranking streams.
+                Sign in with your Twitch account to see or download a list of
+                the channels you follow along with the follow date.
               </p>
             </>
           )}
@@ -80,13 +82,13 @@ export default async function Home() {
                 <span className="grid size-5 place-items-center rounded bg-white/15 text-xs font-black">
                   T
                 </span>
-                Connect with Twitch <span aria-hidden="true">↗</span>
+                Sign in with Twitch <span aria-hidden="true">↗</span>
               </button>
             </form>
           )}
         </div>
 
-        <div className="mt-24 grid max-w-3xl grid-cols-1 border-t border-white/10 pt-6 sm:grid-cols-3 sm:gap-8">
+        {/* <div className="mt-24 grid max-w-3xl grid-cols-1 border-t border-white/10 pt-6 sm:grid-cols-3 sm:gap-8">
           <div>
             <p className="text-2xl font-semibold text-white/50">
               <span className="text-[#a970ff]">Follow List</span>
@@ -96,11 +98,17 @@ export default async function Home() {
               spreadsheet.
             </p>
           </div>
-        </div>
+        </div> */}
       </section>
 
       <footer className="relative border-t border-white/10 px-6 py-4 text-xs text-white/35 sm:px-10">
-        Made with love
+        <div className="flex justify-center gap-1 align-middle">
+          Made with love by{" "}
+          <a href="https://abidur.dev" target="_blank">
+            abidur.dev
+          </a>{" "}
+          in NYC
+        </div>
       </footer>
     </main>
   );
