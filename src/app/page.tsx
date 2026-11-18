@@ -45,19 +45,14 @@ export default async function Home() {
                 Welcome, <span className="text-[#a970ff]">{userName}</span>
               </h1>
               <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
-                Navigate to the tool you want to use.
+                Navigate to your followed channels to see and download your list
+                of following channels.
               </p>
               <Link
                 href="/follows"
                 className="rounded-md bg-[#9146ff] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
               >
                 My Followed Channels <span aria-hidden="true">↗</span>
-              </Link>
-              <Link
-                href="/boards"
-                className="rounded-md bg-[#9146ff] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
-              >
-                Music Boards <span aria-hidden="true">↗</span>
               </Link>
               <Link
                 href="/profile"
@@ -94,20 +89,11 @@ export default async function Home() {
         <div className="mt-24 grid max-w-3xl grid-cols-1 border-t border-white/10 pt-6 sm:grid-cols-3 sm:gap-8">
           <div>
             <p className="text-2xl font-semibold text-white/50">
-              1. <span className="text-[#a970ff]">Follow List</span>
+              <span className="text-[#a970ff]">Follow List</span>
             </p>
             <p className="mt-2 text-sm text-white/50">
               View a list of channels you follow. Or download it as a CSV
               spreadsheet.
-            </p>
-          </div>
-          <div className="mt-6 sm:mt-0">
-            <p className="text-2xl font-semibold text-white/50">
-              2. <span className="text-[#a970ff]">Music Ranking</span>
-            </p>
-            <p className="mt-2 text-sm text-white/50">
-              Music ranking tool where viewers can rate music and check top
-              songs.
             </p>
           </div>
         </div>
