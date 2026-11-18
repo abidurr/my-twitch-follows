@@ -97,18 +97,18 @@ export default async function FollowsPage() {
         </p>
         <div className="flex flex-wrap gap-3">
           <a
-            href="/api/follows/csv"
-            download="twitch-followed-channels.csv"
-            className="rounded-md bg-[#9146ff] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
-          >
-            Download CSV
-          </a>
-          <a
             href="/api/follows/json"
             download="twitch-followed-channels.json"
             className="rounded-md border border-white/15 px-4 py-2.5 text-sm font-semibold text-white/75 transition-colors hover:border-white/35 hover:text-white"
           >
             Download JSON
+          </a>
+          <a
+            href="/api/follows/csv"
+            download="twitch-followed-channels.csv"
+            className="rounded-md bg-[#9146ff] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a970ff]"
+          >
+            Download CSV
           </a>
         </div>
       </div>
