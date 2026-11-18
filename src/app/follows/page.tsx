@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth, signIn } from "~/server/auth";
 import { db } from "~/server/db";
 import {
+  getFollowedChannelProfileImages,
   getFollowedChannels,
   TwitchApiError,
   type FollowedChannel,
@@ -60,10 +61,15 @@ export default async function FollowsPage() {
   }
 
   let channels: FollowedChannel[] = [];
+  let profileImages: Record<string, string> = {};
   let apiError: TwitchApiError | undefined;
   try {
     channels = await getFollowedChannels(
       account.providerAccountId,
+      account.access_token,
+    );
+    profileImages = await getFollowedChannelProfileImages(
+      channels.map((channel) => channel.broadcaster_id),
       account.access_token,
     );
   } catch (error) {
@@ -119,7 +125,10 @@ export default async function FollowsPage() {
         </p>
       ) : (
         <div className="mt-8 overflow-x-auto">
-          <FollowedChannelsTable channels={channels} />
+          <FollowedChannelsTable
+            channels={channels}
+            profileImages={profileImages}
+          />
         </div>
       )}
     </FollowsPageLayout>

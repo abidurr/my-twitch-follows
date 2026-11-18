@@ -38,6 +38,15 @@ const channelResponseSchema = z.object({
   ),
 });
 
+const userProfileImagesResponseSchema = z.object({
+  data: z.array(
+    z.object({
+      id: z.string(),
+      profile_image_url: z.string(),
+    }),
+  ),
+});
+
 export type FollowedChannel = z.infer<
   typeof followedChannelsResponseSchema
 >["data"][number];
@@ -90,6 +99,40 @@ export async function getFollowedChannels(
     seenCursors.add(nextCursor);
     cursor = nextCursor;
   }
+}
+
+export async function getFollowedChannelProfileImages(
+  broadcasterIds: string[],
+  accessToken: string,
+): Promise<Record<string, string>> {
+  const uniqueIds = [...new Set(broadcasterIds)];
+  const profileImages: Record<string, string> = {};
+
+  for (let index = 0; index < uniqueIds.length; index += 100) {
+    const url = new URL("https://api.twitch.tv/helix/users");
+    for (const id of uniqueIds.slice(index, index + 100)) {
+      url.searchParams.append("id", id);
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": env.AUTH_TWITCH_ID,
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new TwitchApiError(response.status);
+    }
+
+    const result = userProfileImagesResponseSchema.parse(await response.json());
+    for (const user of result.data) {
+      profileImages[user.id] = user.profile_image_url;
+    }
+  }
+
+  return profileImages;
 }
 
 export async function getChannelInfo(

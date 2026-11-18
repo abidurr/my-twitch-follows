@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 
 type FollowedChannel = {
@@ -21,8 +22,10 @@ const columns: { key: SortKey; label: string }[] = [
 
 export default function FollowedChannelsTable({
   channels,
+  profileImages,
 }: {
   channels: FollowedChannel[];
+  profileImages: Record<string, string>;
 }) {
   const [sort, setSort] = useState<{
     key: SortKey;
@@ -63,6 +66,9 @@ export default function FollowedChannelsTable({
     <table className="w-full min-w-160 border-collapse text-left text-sm">
       <thead>
         <tr className="border-y border-white/10 text-xs tracking-wide text-white/45 uppercase">
+          <th scope="col" className="px-4 py-3 font-medium">
+            Profile
+          </th>
           {columns.map(({ key, label }) => (
             <th
               key={key}
@@ -92,35 +98,66 @@ export default function FollowedChannelsTable({
         </tr>
       </thead>
       <tbody className="divide-y divide-white/10">
-        {sortedChannels.map((channel) => (
-          <tr key={channel.broadcaster_id}>
-            <td className="px-4 py-4 font-medium text-white">
-              {channel.broadcaster_name}
-            </td>
-            <td className="px-4 py-4 text-white/65">
-              {channel.broadcaster_login}
-            </td>
-            <td className="px-4 py-4 font-mono text-xs text-white/50">
-              {channel.broadcaster_id}
-            </td>
-            <td className="px-4 py-4 text-white/65">
-              <time dateTime={channel.followed_at}>
-                {new Date(channel.followed_at).toLocaleDateString()}
-              </time>
-            </td>
-            <td className="px-4 py-4">
-              <a
-                href={`https://www.twitch.tv/${channel.broadcaster_login}`}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Visit ${channel.broadcaster_name} on Twitch`}
-                className="text-[#b991ff] hover:text-white"
-              >
-                Visit on Twitch.tv
-              </a>
-            </td>
-          </tr>
-        ))}
+        {sortedChannels.map((channel) => {
+          const profileImageUrl = profileImages[channel.broadcaster_id];
+
+          return (
+            <tr key={channel.broadcaster_id}>
+              <td className="px-4 py-3">
+                <a
+                  href={`https://www.twitch.tv/${channel.broadcaster_login}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Visit ${channel.broadcaster_name} on Twitch`}
+                  className="inline-flex"
+                >
+                  {profileImageUrl ? (
+                    <Image
+                      src={profileImageUrl}
+                      alt={`${channel.broadcaster_name} profile picture`}
+                      width={40}
+                      height={40}
+                      unoptimized
+                      className="size-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="grid size-10 place-items-center rounded-full bg-white/10 font-medium text-white/70"
+                    >
+                      {channel.broadcaster_name.charAt(0)}
+                    </span>
+                  )}
+                </a>
+              </td>
+              <td className="px-4 py-4 font-medium text-white">
+                {channel.broadcaster_name}
+              </td>
+              <td className="px-4 py-4 text-white/65">
+                {channel.broadcaster_login}
+              </td>
+              <td className="px-4 py-4 font-mono text-xs text-white/50">
+                {channel.broadcaster_id}
+              </td>
+              <td className="px-4 py-4 text-white/65">
+                <time dateTime={channel.followed_at}>
+                  {new Date(channel.followed_at).toLocaleDateString()}
+                </time>
+              </td>
+              <td className="px-4 py-4">
+                <a
+                  href={`https://www.twitch.tv/${channel.broadcaster_login}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Visit ${channel.broadcaster_name} on Twitch`}
+                  className="text-[#b991ff] hover:text-white"
+                >
+                  Visit on Twitch.tv
+                </a>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
