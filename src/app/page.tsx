@@ -31,7 +31,7 @@ export default async function Home() {
               <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
                 As a fellow Twitch enjoyer, I noticed it was not a simple task
                 to get a list of all the channels I followed. So I built this
-                simple tool. It is free to use, and not store or sell your
+                simple tool. It is free to use, and does not store or sell your
                 following data :D
               </p>
               <p className="mt-7 max-w-xl text-lg leading-8 text-white/60">
