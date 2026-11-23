@@ -131,13 +131,13 @@ export default function FollowedChannelsTable({
                   )}
                 </a>
               </td>
+              <td className="px-4 py-4 font-medium text-white">
+                {channel.broadcaster_name}
+              </td>
               <td className="px-4 py-4 text-white/65">
                 <time dateTime={channel.followed_at}>
                   {new Date(channel.followed_at).toLocaleDateString()}
                 </time>
-              </td>
-              <td className="px-4 py-4 font-medium text-white">
-                {channel.broadcaster_name}
               </td>
               <td className="px-4 py-4 text-white/65">
                 {channel.broadcaster_login}
