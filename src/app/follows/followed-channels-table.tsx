@@ -14,10 +14,10 @@ type SortKey = "name" | "login" | "id" | "followedAt";
 type SortDirection = "ascending" | "descending";
 
 const columns: { key: SortKey; label: string }[] = [
-  { key: "name", label: "Name" },
-  { key: "login", label: "Login" },
-  { key: "id", label: "Twitch ID" },
+  { key: "name", label: "Channel" },
   { key: "followedAt", label: "Followed" },
+  { key: "login", label: "Username" },
+  { key: "id", label: "ID" },
 ];
 
 export default function FollowedChannelsTable({
