@@ -81,7 +81,7 @@ export default function FollowedChannelsTable({
                 onClick={() => sortBy(key)}
                 className="inline-flex items-center gap-2 text-left hover:text-white"
               >
-                {label}
+                {label?.toUpperCase()}
                 <span aria-hidden="true">
                   {sort?.key === key
                     ? sort.direction === "ascending"
