@@ -131,6 +131,11 @@ export default function FollowedChannelsTable({
                   )}
                 </a>
               </td>
+              <td className="px-4 py-4 text-white/65">
+                <time dateTime={channel.followed_at}>
+                  {new Date(channel.followed_at).toLocaleDateString()}
+                </time>
+              </td>
               <td className="px-4 py-4 font-medium text-white">
                 {channel.broadcaster_name}
               </td>
@@ -140,11 +145,7 @@ export default function FollowedChannelsTable({
               <td className="px-4 py-4 font-mono text-xs text-white/50">
                 {channel.broadcaster_id}
               </td>
-              <td className="px-4 py-4 text-white/65">
-                <time dateTime={channel.followed_at}>
-                  {new Date(channel.followed_at).toLocaleDateString()}
-                </time>
-              </td>
+
               <td className="px-4 py-4">
                 <a
                   href={`https://www.twitch.tv/${channel.broadcaster_login}`}
