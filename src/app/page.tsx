@@ -21,7 +21,7 @@ export default async function Home() {
             <>
               <p className="mb-6 flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-[#b991ff] uppercase">
                 <span className="h-px w-8 bg-[#9146ff]" />
-                https://my-twitch-follows.up.railway.app/
+                my-twitch-follows.up.railway.app
               </p>
               <h1 className="max-w-2xl text-4xl leading-[1.05] font-semibold sm:text-7xl">
                 Get a list of all your{" "}
