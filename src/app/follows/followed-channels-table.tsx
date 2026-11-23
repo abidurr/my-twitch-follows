@@ -67,7 +67,7 @@ export default function FollowedChannelsTable({
       <thead>
         <tr className="border-y border-white/10 text-xs tracking-wide text-white/45 uppercase">
           <th scope="col" className="px-4 py-3 font-medium">
-            Profile
+            Image
           </th>
           {columns.map(({ key, label }) => (
             <th
@@ -113,6 +113,7 @@ export default function FollowedChannelsTable({
                 >
                   {profileImageUrl ? (
                     <Image
+                      style={{ marginLeft: "auto" }}
                       src={profileImageUrl}
                       alt={`${channel.broadcaster_name} profile picture`}
                       width={40}
