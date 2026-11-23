@@ -154,7 +154,7 @@ export default function FollowedChannelsTable({
                   aria-label={`Visit ${channel.broadcaster_name} on Twitch`}
                   className="text-[#b991ff] hover:text-white"
                 >
-                  {`https://twitch.tv/${channel.broadcaster_login}`}
+                  {`twitch.tv/${channel.broadcaster_login}`}
                 </a>
               </td>
             </tr>
