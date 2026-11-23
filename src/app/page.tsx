@@ -101,7 +101,7 @@ export default async function Home() {
         </div> */}
       </section>
 
-      <footer className="relative border-t border-white/10 px-6 py-4 text-xs text-white/35 sm:px-10">
+      {/* <footer className="relative border-t border-white/10 px-6 py-4 text-xs text-white/35 sm:px-10">
         <div className="flex justify-center gap-1 align-middle">
           Made with love by{" "}
           <a href="https://abidur.dev" target="_blank">
@@ -109,7 +109,7 @@ export default async function Home() {
           </a>{" "}
           in NYC
         </div>
-      </footer>
+      </footer> */}
     </main>
   );
 }
