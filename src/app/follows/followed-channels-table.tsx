@@ -93,7 +93,7 @@ export default function FollowedChannelsTable({
             </th>
           ))}
           <th scope="col" className="px-4 py-3 font-medium">
-            Channel
+            Link
           </th>
         </tr>
       </thead>
@@ -153,7 +153,7 @@ export default function FollowedChannelsTable({
                   aria-label={`Visit ${channel.broadcaster_name} on Twitch`}
                   className="text-[#b991ff] hover:text-white"
                 >
-                  Visit on Twitch.tv
+                  {`https://www.twitch.tv/${channel.broadcaster_login}`}
                 </a>
               </td>
             </tr>
